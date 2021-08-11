@@ -1,0 +1,162 @@
+{% extends 'wordCounter/base.html' %}
+
+{% block style %}
+	<style type="text/css">
+		
+
+		body{
+			background:#fff4e2;
+		}
+
+		textarea{
+			border-radius:4px;
+			border:1px solid orange;
+			height:75vh;
+			color:grey;
+		}
+		textarea::placeholder{
+			color:grey;
+		}
+		textarea:focus{
+			border:1.5px solid #4482FF;
+			box-shadow:0px 0px 4px 2px #4482FF;
+			outline:none;
+		}
+		textarea:focus::placeholder{
+			color:lightblue;
+		}
+		.stats-box
+		{
+			border-top:5px solid orange;
+		}
+		.text-darkinfo
+		{
+			color:#4482FF;
+		}
+		.bg-orange
+		{
+			background:#ffbf59
+		}
+
+
+	</style>
+{% endblock style %}
+
+{% block content %}
+
+<div class="jumbotron-fluid bg-orange p-2">
+	<h2 class="text-center text-light display-3">Word Counter</h2>
+</div>
+
+<div class="container-fluid mt-4 mb-2">
+	<div class="row">
+		<div class="col-md-7">
+			<form method="post" action='.'>
+				{% csrf_token %}
+				<textarea placeholder="Write Something here...." class="w-100 p-3 textbox"></textarea>
+			</form>
+		</div>
+		<div class="col-md-5">
+			<div class="container-fluid rounded pt-2 pl-4 pb-2 bg-light stats-box">
+				<div class="row">
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">WORDS</h3>
+							<h1 class="text-darkinfo" id="numOfWords">0</h1>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">CHARACTERS</h3>
+							<h1 class="text-darkinfo" id="numOfCharacters">0</h1>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">SENTENCES</h3>
+							<h1 class="text-darkinfo" id="numOfSentences">0</h1>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">LINES </h3>
+							<h1 class="text-darkinfo" id="numOfLines">0</h1>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">PARAGRAPHS</h3>
+							<h1 class="text-darkinfo" id="numOfParagraphs">0</h1>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">READING TIME</h3>
+							<h1 class="text-darkinfo" id="readingTime">0</h1>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h5 class="font-weight-bold text-darkinfo">Most Frequent Words used : </h3>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="d-flex flex-column">
+							<h6 class="font-weight-bold text-darkinfo" id="freq_word">---</h6>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	var textbox = document.getElementsByClassName("textbox")[0];
+	textbox.onkeyup = function(){
+		//here goes the python code
+		if(this.value.length!=0){
+			$.ajax({
+			type:'GET',
+			url:'{% url "word-count:counter-function" %}',
+			data:{
+				'text':this.value
+			},
+			success:function(json){
+				//success code goes here
+				if(json.success){
+					document.getElementById("numOfWords").innerHTML = json.words;
+					document.getElementById("numOfSentences").innerHTML = json.sentences;
+					document.getElementById("numOfCharacters").innerHTML = json.characters;
+					document.getElementById("numOfLines").innerHTML = json.lines;
+					document.getElementById("numOfParagraphs").innerHTML = json.paragraphs;
+					document.getElementById("readingTime").innerHTML = json.read_speed;
+					document.getElementById("freq_word").innerHTML = json.most_occur
+				}				
+			}
+		});
+		}
+		else
+		{
+			document.getElementById("numOfWords").innerHTML = 0;
+			document.getElementById("numOfSentences").innerHTML = 0;
+			document.getElementById("numOfCharacters").innerHTML = 0;
+			document.getElementById("numOfParagraphs").innerHTML = 0;
+			document.getElementById("numOfLines").innerHTML = 0;
+			document.getElementById("readingTime").innerHTML = 0;
+			document.getElementById("freq_word").innerHTML = '---';
+		}
+
+	}
+</script>
+
+{% endblock content %}
