@@ -8,7 +8,7 @@ def home(request):
 
 def counter_function(request):
 	if request.GET:
-		print("text came to backend")
+		# print("text came to backend")
 		text = request.GET.get('text').strip()
 		if text != '':
 			characters = 0
