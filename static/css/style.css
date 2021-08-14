@@ -1,0 +1,24 @@
+body {
+  background: #fff4e2;
+}
+textarea {
+  border-radius: 4px;
+  border: 1px solid orange;
+  height: 75vh;
+  color: grey;
+}
+textarea::placeholder {
+  color: grey;
+}
+textarea:focus {
+  outline: none;
+}
+.stats-box {
+  border-top: 5px solid orange;
+}
+.text-darkinfo {
+  color: #4482ff;
+}
+.bg-orange {
+  background: #ffbf59;
+}

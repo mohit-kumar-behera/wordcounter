@@ -1,47 +1,5 @@
 {% extends 'wordCounter/base.html' %}
 
-{% block style %}
-	<style type="text/css">
-		
-
-		body{
-			background:#fff4e2;
-		}
-
-		textarea{
-			border-radius:4px;
-			border:1px solid orange;
-			height:75vh;
-			color:grey;
-		}
-		textarea::placeholder{
-			color:grey;
-		}
-		textarea:focus{
-			border:1.5px solid #4482FF;
-			box-shadow:0px 0px 4px 2px #4482FF;
-			outline:none;
-		}
-		textarea:focus::placeholder{
-			color:lightblue;
-		}
-		.stats-box
-		{
-			border-top:5px solid orange;
-		}
-		.text-darkinfo
-		{
-			color:#4482FF;
-		}
-		.bg-orange
-		{
-			background:#ffbf59
-		}
-
-
-	</style>
-{% endblock style %}
-
 {% block content %}
 
 <div class="jumbotron-fluid bg-orange p-2">
@@ -119,44 +77,5 @@
 		</div>
 	</div>
 </div>
-
-<script>
-	var textbox = document.getElementsByClassName("textbox")[0];
-	textbox.onkeyup = function(){
-		//here goes the python code
-		if(this.value.length!=0){
-			$.ajax({
-			type:'GET',
-			url:'{% url "word-count:counter-function" %}',
-			data:{
-				'text':this.value
-			},
-			success:function(json){
-				//success code goes here
-				if(json.success){
-					document.getElementById("numOfWords").innerHTML = json.words;
-					document.getElementById("numOfSentences").innerHTML = json.sentences;
-					document.getElementById("numOfCharacters").innerHTML = json.characters;
-					document.getElementById("numOfLines").innerHTML = json.lines;
-					document.getElementById("numOfParagraphs").innerHTML = json.paragraphs;
-					document.getElementById("readingTime").innerHTML = json.read_speed;
-					document.getElementById("freq_word").innerHTML = json.most_occur
-				}				
-			}
-		});
-		}
-		else
-		{
-			document.getElementById("numOfWords").innerHTML = 0;
-			document.getElementById("numOfSentences").innerHTML = 0;
-			document.getElementById("numOfCharacters").innerHTML = 0;
-			document.getElementById("numOfParagraphs").innerHTML = 0;
-			document.getElementById("numOfLines").innerHTML = 0;
-			document.getElementById("readingTime").innerHTML = 0;
-			document.getElementById("freq_word").innerHTML = '---';
-		}
-
-	}
-</script>
 
 {% endblock content %}

@@ -5,5 +5,5 @@ app_name = 'word-count'
 
 urlpatterns = [
     path('home/',views.home,name="home"),
-    path('',views.counter_function,name="counter-function")
+    path('count/',views.counter_function,name="counter-function")
 ]
